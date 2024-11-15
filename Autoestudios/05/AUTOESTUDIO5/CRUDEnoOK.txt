@@ -1,0 +1,17 @@
+/CRUDNoOK/
+
+BEGIN 
+    PC_CLIENTE.ad_cliente('NN', 11111111, 'María', 'mari@m.com');
+END;
+	
+BEGIN
+    PC_CLIENTE.co('NN', 11111111); 
+END;
+
+BEGIN
+    PC_FACTURAS.ad_facturas(1, SYSDATE, 100, '01', '1234567890');
+END;
+
+BEGIN
+    PC_BIEN.ad_bien(10000000, 'Sam', 100);
+END;

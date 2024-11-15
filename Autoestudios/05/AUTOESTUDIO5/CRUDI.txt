@@ -1,0 +1,104 @@
+/*CRUDI*/
+CREATE OR REPLACE PACKAGE BODY PC_CLIENTE IS
+
+	PROCEDURE ad_cliente(tid IN VARCHAR, nid IN NUMBER, nombre IN VARCHAR, correo IN VARCHAR) IS
+		tid IN VARCHAR, nid IN NUMBER;
+	BEGIN
+	SELECT tid, nid INTO cliente FROM CLIENTE;
+	INSERT INTO CLIENTE(tid, nid) VALUES (tid_, nid_);
+	FUNCTION co
+          DECLARE
+            CURSOR CLIENTE_ IS
+                SELECT tid, nid
+                FROM CLIENTE;
+            tid_ VARCHAR;
+            nid_ NUMBER;
+          BEGIN
+          OPEN CLIENTE_;
+            LOOP
+                FETCH CLIENTE_ INTO tid, nid;
+                EXIT WHEN CLIENTE_%NOTFOUND;
+            END LOOP;
+    	  CLOSE CLIENTE_;
+    	  END;
+	RETURN VARCHAR2
+
+	IS
+	  CLIENTE_ IS SYS_REFCURSOR;
+	BEGIN
+	  OPEN CLIENTE_ FOR
+		SELECT tid, nid FROM CLIENTE;
+	  RETURN (CLIENTE_);
+	END CLIENTE_;
+END PC_OFERTAS;
+
+
+CREATE OR REPLACE PACKAGE BODY PC_BIEN IS
+
+	PROCEDURE ad_bien(codigo IN VARCHAR, nombre IN VARCHAR, precioVenta IN NUMBER) IS
+	  codigo IN VARCHAR, nombre IN VARCHAR;
+	BEGIN
+ 	  SELECT codigo, nombre, precioVenta INTO bien FROM BIEN;
+	  INSERT INTO BIEN(codigo, nombre, precioVenta)VALUES (codigo_, nombre_);
+	FUNCTION BienDelMes
+          DECLARE
+            CURSOR BIEN_ IS
+                SELECT codigo, nombre, precioVenta
+                FROM BIEN;
+             codigo_ VARCHAR;
+             nombre_ VARCHAR;
+          BEGIN
+            OPEN BIEN_;
+            LOOP
+                FETCH BIEN_ INTO codigo, nombre;
+                EXIT WHEN BIEN_%NOTFOUND;
+            END LOOP;
+    CLOSE BIEN_;
+    END;
+      RETURN VARCHAR2
+	IS
+	  BIEN_ IS SYS_REFCURSOR;
+	BEGIN
+	  OPEN BIEN_ FOR
+	SELECT codigo, nombre FROM BIEN;
+    RETURN (BIEN_);
+	END BIEN_;
+
+	END ad_bien;
+END PC_BIEN;
+
+
+CREATE OR REPLACE PACKAGE BODY PC_FACTURA IS
+	PROCEDURE ad_bien(numero IN NUMBER, fecha IN DATE, total IN NUMBER, tid IN VARCHAR, nid IN VARCHAR) IS
+	  fecha IN DATE, total IN NUMBER, porcentaje IN NUMBER);
+	BEGIN
+	  SELECT nombre, fecha, total, tid, nid INTO factura FROM FACTURA;
+	  INSERT INTO FACTURA(nombre, fecha, total, tid, nid) VALUES (fecha_, total_, porcentaje_);
+ 	FUNCTION coFa
+          DECLARE
+            CURSOR FACTURA_ IS
+                SELECT nombre, fecha, total, tid, nid
+                FROM FACTURA;
+             fecha_ DATE;
+             total_ NUMBER;
+             porcentaje_ NUMBER;
+        BEGIN
+        OPEN FACTURA_;
+            LOOP
+                FETCH FACTURA_ INTO fecha, total, porcentaje;
+                EXIT WHEN FACTURA_%NOTFOUND;
+            END LOOP;
+    CLOSE FACTURA_;
+    END;
+
+RETURN VARCHAR2
+
+	IS
+	  FACTURA_ IS SYS_REFCURSOR;
+	BEGIN
+	  OPEN FACTURA_ FOR
+	  SELECT fecha, total, porcentaje FROM FACTURA;
+	RETURN (FACTURA_);
+	END FACTURA_;
+	END ad_facturas;
+	END PC_FACTURA;

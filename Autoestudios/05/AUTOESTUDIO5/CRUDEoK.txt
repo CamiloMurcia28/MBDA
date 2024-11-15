@@ -1,0 +1,37 @@
+--/*CRUDEoK
+INSERT INTO 
+
+
+BEGIN
+    PC_FACTURAS.ad_facturas(1, SYSDATE, 100, 'CC', '1234');
+END;
+
+
+BEGIN 
+   PC_BIEN.bien_del_mes('B01', 'Bien1');
+End;
+
+
+BEGIN
+    PC_CLIENTE.ad_cliente('CC', 1234, 'ROBERTO CARLOS', 'ROBERTICOLESMES@gmail.com');
+END;
+
+
+BEGIN
+    PC_BIEN.ad_bien('B01', 'Bien1', 123456);
+END;
+
+
+BEGIN
+    PC_CLIENTE.up_cliente('1234', 1234);
+END;
+
+
+BEGIN
+    PC_BIEN.up_bien('B01');
+END;
+
+
+BEGIN
+    PC_FACTURAS.up_facturas(1, 'CC', 1234);
+END;

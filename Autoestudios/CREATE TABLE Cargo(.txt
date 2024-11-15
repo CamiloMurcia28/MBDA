@@ -1,0 +1,89 @@
+CREATE TABLE Cargo(
+
+    nombre VARCHAR(50)NOT NULL,
+    descripcion VARCHAR(200),
+    modalidad VARCHAR(15) NOT NULL,
+    codigo VARCHAR(20)NOT NULL, 
+    fecha DATE NOT NULL
+    area NUMBER(10) NOT NULL,
+    convocatoria NUMBER(20) NOT NULL
+
+);
+
+CREATE TABLE Responsabilidad(
+
+    nombre VARCHAR(50)NOT NULL, 
+    descripcion VARCHAR(200),
+    nivel VARCHAR(10)NOT NULL, 
+    fecha DATE NOT NULL,
+    codigo VARCHAR(10)NOT NULL,
+    cargo VARCHAR(20)NOT NULL
+
+);
+
+ALTER TABLE Cargo ADD CONSTRAINT PK_CARGO PRIMARY KEY(codigo);
+ALTER TABLE Responsabilidad ADD CONSTRAINT PK_RESPONSABILIDAD PRIMARY KEY(codigo);
+
+ALTER TABLE Responsabilidad ADD CONSTRAINT FK_RESPONSABILIDAD FOREIGN KEY(cargo) REFERENCES Cargo(codigo);
+
+ALTER TABLE Responsabilidad ADD CONSTRAINT UK_RESPONSABILIDAD UNIQUE(nombre);
+
+--Integridad declarativa--
+
+ALTER TABLE Cargo ADD CONSTRAINT CK_CARGO_MODALIDAD CHECK(modalidad IN ('Presencial', 'Remota'));
+ALTER TABLE Responsabilidad ADD CONSTRAINT CK_RESP_NIVEL CHECK(nivel IN ('Alto', 'medio', 'bajo'));
+ALTER TABLE CARGO ADD CONSTRAINT AT_CARGO_CODIGO CHECK(REG_EXP(substr(nombre, 1,1) ||cast(fecha as str)|| [0,9]{6}));
+ALTER TABLE Responsabilidad ADD CONSTRAINT AT_descripcion CHECK (length(descripcion) > 50 AND length(descripcion)<= 200)
+
+--Integridad procedimental--
+
+CREATE TRIGGER I_RESP_AUTO
+BEFORE INSERT ON Responsabilidad
+FOR EACH ROW
+DECLARE
+BEGIN
+    IF: new.fecha is NULL THEN:
+    SET new.fecha := SYSDATE END IF;
+    IF new.codigo IS NULL THEN:
+    SET new.codigo := (REG_EXP(substr(nombre, 1,1) ||cast(fecha_creacion as str)|| [0,9]{6})) END IF;
+END;
+
+CREATE TRIGGER I_CARGO_AUTO
+BEFORE INSERT ON Cargo
+FOR EACH ROW
+DECLARE
+BEGIN
+    IF: new.fecha is NULL THEN:
+    SET new.fecha := SYSDATE END IF;
+    IF: new.codigo IS NULL THEN:
+    SET new.codigo := (REG_EXP(substr(nombre, 1,1) ||cast(fecha_creacion as str)|| [0,9]{6})) END IF;
+END;
+
+CREATE TRIGGER I_RESP_CODIGO
+BEFORE INSERT ON Responsabilidad
+FOR EACH ROW
+DECLARE
+BEGIN
+    IF: new.codigo is NULL THEN:
+    SET new.codigo := (REG_EXP(subst(nombre, 1,1) ||cast(fecha_creacion as str)|| [0,9]{6})) END IF;
+END;
+
+CREATE TRIGGER U_CARGO_MOD
+BEFORE UPDATE ON Cargo
+FOR EACH ROW 
+DECLARE
+BEGIN
+    new.nombre := old.nombre
+    new.descripcion := old.descripcion
+    new.modalidad := new.modalidad
+    new.codigo := old.codigo
+    new.fecha := old.fecha
+END;
+
+CREATE TRIGGER U_RESP_CARGO
+BEFORE UPDATEON Responsabilidad
+FOR EACH ROW
+DECLARE
+BEGIN
+    IF: old.Responsabilidad.cargo is NULL THEN:
+    

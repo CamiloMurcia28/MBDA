@@ -1,0 +1,383 @@
+<? xml version = '1.0'?>
+
+<!--Base para countries.xml-->
+
+<!DOCTYPE countries [
+    <!ELEMENT countries (country)* >
+    <!ELEMENT country (city | language)* >
+    <!ELEMENT city (name, population)>
+    <!ELEMENT name (#PCDATA)>
+    <!ELEMENT population (#PCDATA)>
+    <!ELEMENT language (#PCDATA | percentage)* >
+    <!ATTLIST country name CDATA #REQUIRED
+                      population CDATA #REQUIRED
+                      area CDATA #REQUIRED>
+    <!ATTLIST language percentage CDATA #REQUIRED>
+]>
+
+<countries>
+	<country name = 'Vatican City' population = '825' area = '0.49'>
+		<language percentage = '100'>Italian</language>
+	</country>
+	<country name = 'Monaco' population = '38962' area = '2' >
+		<language percentage = '50'>French</language>
+		<language percentage = '50'>English</language>
+	</country>
+	<country name = 'Singapore' population = '5454000' area = '728.6'>
+		<city>
+			<name>Johor Bahru</name>
+			<population>502900</population>
+		</city>
+		<language percentage = '20'>Malay</language>
+		<language percentage = '50'>English</language>
+		<language percentage = '15'>Tamil</language>
+		<language percentage = '15'>Singaporean Mandarin</language>
+	</country>
+</countries>
+
+--2.1 
+
+<!DOCTYPE TDescripcion[
+<!ELEMENT TDescripcion (informacion*)>
+<!ELEMENT informacion (combinaciones+, peso?, volumen?)>
+<!ELEMENT combinaciones (descripcion, usoPropuesto)?>
+<!ELEMENT peso EMPTY>
+<!ELEMENT volumen EMPTY>
+<!ATTLIST combinaciones
+            descripcion CDATA #REQUIRED
+            usoPropuesto CDATA #REQUIRED>
+<!ATTLIST peso gramos CDATA #REQUIRED>
+<!ATTLIST volumen
+            ancho CDATA #REQUIRED
+            largo CDATA #REQUIRED
+            alto CDATA #REQUIRED>
+]>
+
+---XML OK
+
+<TDescripcion>
+  <informacion>
+    <combinaciones descripcion="Horno de Cocina + Mezcladora" usoPropuesto="Hornear, batir y mezclar ingredientes para preparar deliciosas recetas"/>
+    <peso gramos="5000"/>
+    <volumen ancho="20" largo="30" alto="40"/>
+  </informacion>
+</TDescripcion>
+
+--Se verifica la correcta estructura del DTD Y EL XML
+
+<TDescripcion>
+  <informacion>
+    <combinaciones descripcion="Kit de entrenamiento basico(Pesas + Ligas + Pesas para cuerpo)" usoPropuesto="Ideal para entrenamientos de fuerza y resistencia">
+    </combinaciones>
+    <peso gramos="5000" />
+    <volumen ancho="30" largo="40" alto="20" />
+  </informacion>
+</TDescripcion>
+
+---XML NoOk
+--Este es un XML NoOk porque no cierra bien la etiqueta
+<TDescripcion>
+  <informacion>
+    <combinaciones descripcion="Combo 1" usoPropuesto="Uso propuesto combo 1" >
+    <combinaciones descripcion="Combo 2" usoPropuesto="Uso propuesto combo 2" />
+    <peso gramos="numero" />
+    <volumen ancho="numero" largo="numero" alto="numero" />
+  </informacion>
+</TDescripcion>
+
+--Este es un XML NoOk porque la etiqueta informacion no tiene cierre
+<TDescripcion>
+  <informacion>
+    <combinaciones descripcion="Combo 1" usoPropuesto="Uso propuesto combo 1" >
+    <combinaciones descripcion="Combo 2" usoPropuesto="Uso propuesto combo 2" />
+    <peso gramos="numero" />
+    <volumen ancho="numero" largo="numero" alto="numero" />
+  <descripcion>
+</TDescripcion>
+
+CREATE TABLE Universidad(
+    codigo VARCHAR2(3) NOT NULL,
+    nombre VARCHAR2(20),
+    direccion VARCHAR2(50)
+    );
+
+CREATE TABLE Usuario(
+    codigo VARCHAR2(10) NOT NULL,
+    tid VARCHAR2(3) NOT NULL,
+    nid VARCHAR2(10) NOT NULL,
+    nombre VARCHAR2(50) NOT NULL,
+    programa VARCHAR2(20) NOT NULL,
+    correo VARCHAR2(50) NOT NULL,
+    registro DATE NOT NULL,
+    suspension DATE,
+    nSuspensiones NUMBER(3) NOT NULL,
+    universidad_codigo VARCHAR2(3) NOT NULL
+    );
+    
+CREATE TABLE Califica(
+    estrellas NUMBER(1) NOT NULL,
+    tid VARCHAR2(3) NOT NULL,
+    nid VARCHAR2(10) NOT NULL,
+    Articulo_id VARCHAR2(10) NOT NULL
+    );
+
+CREATE TABLE Combo_Oferta(
+    numero NUMBER(10) NOT NULL,
+    fecha DATE NOT NULL,
+    precio NUMBER(6)NOT NULL,
+    foto VARCHAR2(50) NOT NULL ,
+    descripcion XMLTYPE,
+    estado VARCHAR2(5) NOT NULL,
+    trueque VARCHAR2(6),
+    tid VARCHAR2(3) NOT NULL,
+    nid VARCHAR2(10) NOT NULL
+    );
+
+CREATE TABLE Oferta(
+    combo_oferta NUMBER(9) NOT NULL, 
+    articulo VARCHAR2(10) NOT NULL
+    );
+
+CREATE TABLE Articulo(
+    id_articulo VARCHAR2(10) NOT NULL,
+    descripcion VARCHAR2(20) NOT NULL,
+    estado VARCHAR2(5) NOT NULL,
+    foto VARCHAR2(50) NOT NULL,
+    precio NUMBER (6) NOT NULL,
+    disponible VARCHAR2(5) NOT NULL,
+    tid VARCHAR2(3) NOT NULL,
+    nid VARCHAR2(10) NOT NULL,
+    codigo_categoria VARCHAR2(5) NOT NULL
+    );
+
+CREATE TABLE Ropa(
+    id_articulo VARCHAR2(10) NOT NULL,
+    talla VARCHAR2(1) NOT NULL,
+    material VARCHAR2(10) NOT NULL,
+    color VARCHAR2(10) NOT NULL
+    );
+
+CREATE TABLE Perecedero(
+    id_articulo VARCHAR2(10) NOT NULL,
+    vencimiento DATE NOT NULL
+    );
+CREATE TABLE caracteristicas(
+    caracteristica VARCHAR2(20) NOT NULL,
+    id_articulo VARCHAR2(10) NOT NULL
+    );
+    
+CREATE TABLE Categoria(
+    codigo VARCHAR2(5) NOT NULL,
+    nombre VARCHAR2(20) NOT NULL,
+    tipo VARCHAR2(50) NOT NULL,
+    minimo NUMBER(6) NOT NULL,
+    maximo NUMBER(6) NOT NULL,
+    codigopertenecea NUMBER(1) NOT NULL
+    );
+
+CREATE TABLE caracteristicas(
+    caracteristica VARCHAR2(20) NOT NULL,
+    id_articulo VARCHAR2(5) NOT NULL
+    );
+
+/* CICLO 1: Primarias */
+
+ALTER TABLE universidad ADD CONSTRAINT PK_UNIVERSIDAD PRIMARY KEY(codigo);
+ALTER TABLE usuario ADD CONSTRAINT PK_USUARIO PRIMARY KEY(tid,nid);
+ALTER TABLE califica ADD CONSTRAINT PK_calificacion PRIMARY KEY(tid,nid,articulo_id);
+ALTER TABLE combo_oferta ADD CONSTRAINT PK_COMBO_OFERTA PRIMARY KEY (numero);
+ALTER TABLE oferta ADD CONSTRAINT PK_OFERTA PRIMARY KEY(combo_oferta,articulo);
+ALTER TABLE ARTICULO ADD CONSTRAINT PK_ARTICULO PRIMARY KEY (id_articulo);
+ALTER TABLE ROPA ADD CONSTRAINT PK_ROPA PRIMARY KEY(id_articulo);
+ALTER TABLE PERECEDERO ADD CONSTRAINT PK_PERECEDERO PRIMARY KEY(id_articulo);
+ALTER TABLE CARACTERISTICAS ADD CONSTRAINT PK_CARACTERISTICA PRIMARY KEY(id_articulo);
+ALTER TABLE CATEGORIA ADD CONSTRAINT PK_CATEGORIA PRIMARY KEY (codigo);
+
+/* CICLO 1: Unicas */
+
+ALTER TABLE ARTICULO ADD CONSTRAINT UK_ARTICULO_foto UNIQUE (foto);
+
+/* CICLO 1: Foraneas */
+
+ALTER TABLE usuario ADD CONSTRAINT FK_USUARIO_CODIGO FOREIGN KEY(universidad_codigo) REFERENCES universidad(codigo);
+ALTER TABLE califica ADD CONSTRAINT FK_CALIFICACION_USUARIO FOREIGN KEY(tid,nid) REFERENCES usuario(tid,nid);
+ALTER TABLE califica ADD CONSTRAINT FK_CALIFICACION_ARTICULO FOREIGN KEY(articulo_id) REFERENCES articulo(id_articulo);
+ALTER TABLE Combo_Oferta ADD CONSTRAINT FK_COMBO_OFERTA_USUARIO FOREIGN KEY(tid,nid) REFERENCES Usuario(tid,nid);
+ALTER TABLE oferta ADD CONSTRAINT FK_OFERTA_COMBO_OFERTA FOREIGN KEY(combo_oferta) REFERENCES COMBO_OFERTA(numero);
+ALTER TABLE oferta ADD CONSTRAINT FK_OFERTA_ARTICULO FOREIGN KEY(articulo) REFERENCES Articulo(id_articulo);
+ALTER TABLE ROPA ADD CONSTRAINT FK_ROPA_ARTICULO FOREIGN KEY(id_articulo) REFERENCES Articulo(id_articulo);
+ALTER TABLE Perecedero ADD CONSTRAINT FK_PERECEDERO_ARTICULO FOREIGN KEY(id_articulo) REFERENCES Articulo(id_articulo);
+ALTER TABLE caracteristicas ADD CONSTRAINT FK_CARACTERISTICAS_ARTICULO FOREIGN KEY(id_articulo) REFERENCES Articulo(id_articulo);
+ALTER TABLE Articulo ADD CONSTRAINT FK_ARTICULO_USUARIO FOREIGN KEY(tid,nid) REFERENCES Usuario(tid,nid);
+ALTER TABLE Articulo ADD CONSTRAINT FK_CATEGORIA_ARTICULO FOREIGN KEY(codigo_categoria) REFERENCES Categoria(codigo);
+
+/*Atributos*/
+
+ALTER TABLE USUARIO ADD CONSTRAINT CK_USUARIO_TID CHECK(tid IN ('CC', 'TI', 'NIT'));
+ALTER TABLE USUARIO ADD CONSTRAINT CK_USUARIO CHECK (correo LIKE '%@%.com');
+ALTER TABLE ARTICULO ADD CONSTRAINT CK_ARTICULO_ESTADO CHECK(estado IN('NUEVO','USADO'));
+ALTER TABLE ARTICULO ADD CONSTRAINT CK_ARTICULO_PRECIO CHECK(precio IN('50000','100000','200000','250000'));
+ALTER TABLE ARTICULO ADD CONSTRAINT CK_ARTICULO_FOTO CHECK(foto LIKE 'www.%.com%');
+ALTER TABLE ARTICULO ADD CONSTRAINT CK_ARTICULO_DISPONIBLE CHECK(disponible IN('TRUE','FALSE'));
+ALTER TABLE CALIFICA ADD CONSTRAINT CK_CALIFICA_ESTRELLAS CHECK(estrellas > 0 and estrellas <6);
+ALTER TABLE ROPA ADD CONSTRAINT CK_ROPA_TALLA CHECK(talla in ('XS', 'S', 'M', 'L', 'XL'));
+ALTER TABLE COMBO_OFERTA ADD CONSTRAINT CK_COMBO_OFERTA CHECK( numero>0);
+ALTER TABLE COMBO_OFERTA ADD CONSTRAINT CK_COMBO_OFERTA_PRECIO CHECK(precio IN('50','100','150','200','250'));
+ALTER TABLE COMBO_OFERTA ADD CONSTRAINT CK_COMBO_OFERTA_FOTO CHECK(foto LIKE 'https://www.%.com%');
+ALTER TABLE COMBO_OFERTA ADD CONSTRAINT CK_COMBO_OFERTA_ESTADO CHECK(estado IN('O','A','C'));
+ALTER TABLE COMBO_OFERTA ADD CONSTRAINT CK_COMBO_OFERTA_TRUEQUE CHECK(trueque IN('A','C','I','E','R'));
+
+/*PoblarOK*/
+
+/*Universidades*/
+INSERT INTO Universidad(Codigo,nombre,direccion) VALUES ('AE1','ECI','Usaquen');
+INSERT INTO Universidad(Codigo,nombre,direccion) VALUES ('AE2','UNAL','Teusaquillo');
+INSERT INTO Universidad(Codigo,nombre,direccion) VALUES ('AE3','CUN','Santa fe');
+
+/*Usuario*/
+INSERT INTO Usuario(codigo,tid,nid,nombre,programa,correo,registro,suspension,nSuspensiones,universidad_codigo) VALUES('AJEOQIWNML','CC','2049395862','JUAN','SISTEMAS','juan.09@gmail.com','10-08-22','10-06-22','3','AE1');
+INSERT INTO Usuario(codigo,tid,nid,nombre,programa,correo,registro,suspension,nSuspensiones,universidad_codigo) VALUES('QJISJKCJVJ','CC','0494829482','ALBERTO','ESTADISTICA','albert.1@gmail.com','05-03-21','05-12-20','1','AE2');
+INSERT INTO Usuario(codigo,tid,nid,nombre,programa,correo,registro,suspension,nSuspensiones,universidad_codigo) VALUES('KLOIQJKNMA','NIT','1120394859','PABLO','MUSICA','pablo@hotmail.com','09-09-21','09-01-21','0','AE3');
+
+/*Combo-Oferta*/
+
+INSERT INTO combo_oferta(numero,fecha,precio,foto,descripcion,estado,trueque,tid,nid) VALUES('1','01-02-22','250','https://www.imgur.com/awear','<TDescripcion>
+  <informacion>
+    <combinaciones descripcion="Horno de Cocina + Mezcladora" usoPropuesto="Hornear, batir y mezclar ingredientes para preparar deliciosas recetas"/>
+    <peso gramos="5000"/>
+    <volumen ancho="20" largo="30" alto="40"/>
+  </informacion>
+</TDescripcion>','O','A','CC','2049395862');
+
+INSERT INTO combo_oferta(numero,fecha,precio,foto,descripcion,estado,trueque,tid,nid) VALUES('2','02-03-22','250','https://www.imgur.com/sdafq','<TDescripcion>
+  <informacion>
+    <combinaciones descripcion="Kit de entrenamiento basico(Pesas + Ligas + Pesas para cuerpo)" usoPropuesto="Ideal para entrenamientos de fuerza y resistencia">
+    </combinaciones>
+    <peso gramos="5000" />
+    <volumen ancho="30" largo="40" alto="20" />
+  </informacion>
+</TDescripcion>','C','A','CC','0494829482');
+
+INSERT INTO combo_oferta(numero,fecha,precio,foto,descripcion,estado,trueque,tid,nid) VALUES('3','02-01-23','250','https://www.imgur.com/jodsa','<TDescripcion>
+  <informacion>
+    <combinaciones descripcion="Kit de ropa deportiva NIKE (lycra + Lebron Witness 4 + Camiseta Roja)" usoPropuesto="Ideal para entrenamientos deportivos (baloncesto + voleibol)">
+    </combinaciones>
+    <peso gramos="2000" />
+    <volumen ancho="30" largo="40" alto="20" />
+  </informacion>
+</TDescripcion>','O','C','NIT','1120394859');
+
+INSERT INTO combo_oferta(numero,fecha,precio,foto,descripcion,estado,trueque,tid,nid) VALUES('4','04-03-23','100','https://www.imgur.com/3234','<TDescripcion>
+  <informacion>
+    <combinaciones descripcion="Kit estudiantil - Calculadora + Bloc de notas" usoPropuesto="Ideal para matarse la cabeza estudiando">
+    </combinaciones>
+    <peso gramos="500" />
+    <volumen ancho="30" largo="40" alto="20" />
+  </informacion>
+</TDescripcion>','O','A','NIT','1120394859');
+
+INSERT INTO combo_oferta(numero,fecha,precio,foto,descripcion,estado,trueque,tid,nid) VALUES('4','04-05-23','100','https://www.imgur.com/32342','<TDescripcion>
+  <informacion>
+    <combinaciones descripcion="Kit de ropa casual (Jean MarcoPolo + Camiseta Balengaga)" usoPropuesto="Ideal para vestirse bien extrafalario">
+    </combinaciones>
+    <peso gramos="500" />
+    <volumen ancho="30" largo="40" alto="20" />
+  </informacion>
+</TDescripcion>','O','A','NIT','1120394859');
+
+INSERT INTO combo_oferta(numero,fecha,precio,foto,descripcion,estado,trueque,tid,nid) VALUES('4','04-04-23','100','https://www.imgur.com/32342','<TDescripcion>
+  <informacion>
+    <combinaciones descripcion="Kit de ropa casual (Camisa Hilton + Cinturo Velez)" usoPropuesto="Ideal para vestirse bien extrafalario">
+    </combinaciones>
+    <peso gramos="500" />
+    <volumen ancho="30" largo="40" alto="20" />
+  </informacion>
+</TDescripcion>','O','A','CC','0494829482');
+
+/*PoblarNoOK*/
+
+/*Combo Oferta*/
+
+INSERT INTO combo_oferta(numero,fecha,precio,foto,descripcion,estado,trueque,tid,nid) VALUES('1','01-02-22','250','https://www.imgur.com/awear','No se pelao','O','A','CC','2049395862');
+
+--No cumple con el formato xml--
+
+INSERT INTO combo_oferta(numero,fecha,precio,foto,descripcion,estado,trueque,tid,nid) VALUES('2','02-03-22','25000','https://www.imgur.com/sdafq','<TDescripcion>
+  <informacion>
+    <combinaciones descripcion="Kit de entrenamiento basico(Pesas + Ligas + Pesas para cuerpo)" usoPropuesto="Ideal para entrenamientos de fuerza y resistencia">
+    </combinaciones>
+    <peso gramos="5000" />
+    <volumen ancho="30" largo="40" alto="20" />
+  </informacion>
+</TDescripcion>','C','A','CC','0494829482');
+
+--Esta protegida por la restriccion de atributo CK_COMBO_OFERTA_PRECIO
+
+INSERT INTO combo_oferta(numero,fecha,precio,foto,descripcion,estado,trueque,tid,nid) VALUES('3','02-01-23','250','https://www.imgur.com/jodsa','<TDescripcion>
+  <informacion>
+    <combinaciones descripcion="Kit de ropa deportiva NIKE (lycra + Lebron Witness 4 + Camiseta Roja)" usoPropuesto="Ideal para entrenamientos deportivos (baloncesto + voleibol)">
+    </combinaciones>
+    <peso gramos="2000" />
+    <volumen ancho="30" largo="40" alto="20" />
+  </informacion>
+</TDescripcion>','O','C','NIT','112034564569');
+
+--Esta protegida por la restriccion de claves foranea FK_COMBO_OFERTA_USUARIO
+
+/*Usuario*/
+INSERT INTO Usuario(codigo,tid,nid,nombre,programa,correo,registro,suspension,nSuspensiones,universidad_codigo) VALUES('AJEOQIWNML','CE','2049395862','JUAN','SISTEMAS','juan.09@gmail.com','10-08-22','10-06-22','3','AE1');
+-Esta protegida por la restriccion de atributos CK_USUARIO_TID
+
+INSERT INTO Usuario(codigo,tid,nid,nombre,programa,correo,registro,suspension,nSuspensiones,universidad_codigo) VALUES('QJISJKCJVJ','CC','049482482','ALBERTO','ESTADISTICA','albert.1gmail.','05-03-21','05-12-20','1','AE2');
+-Esta protegida por la restriccion de atributos CK_USUARIO
+
+INSERT INTO Usuario(codigo,tid,nid,nombre,programa,correo,registro,suspension,nSuspensiones,universidad_codigo) VALUES('KLOIQJKNMA','NIT','1120394859','PABLO','MUSICA','pablo@hotmail.com','09-09-21','09-01-21','0','AE3');
+--Esta protegida por la restriccion de clave primaria
+
+
+--3  Implemente la consulta Consultar los usos propuestos en las combo-ofertas del ultimo mes
+
+SELECT XMLQuery('//usoPropuesto/text()' 
+                PASSING c.descripcion 
+                RETURNING CONTENT).getStringVal() as usoPropuesto
+FROM Combo_Oferta c
+WHERE c.fecha >= ADD_MONTHS(SYSDATE, -1);
+
+--4 Proponga otra nueva consulta que use Anexos
+
+SELECT x.etiqueta, x.valor
+FROM Combo_Oferta c, XMLTable('/TDescripcion/informacion/combinaciones'
+  PASSING c.descripcion
+  COLUMNS etiqueta VARCHAR2(20) PATH '@descripcion',
+            valor VARCHAR2(50) PATH '@usoPropuesto') x;
+
+
+--5.Anexos-DTD
+
+<!DOCTYPE TDescripcion[
+<!ELEMENT TDescripcion (informacion*)>
+<!ELEMENT informacion (combinaciones+, peso?, volumen?)>
+<!ELEMENT combinaciones (descripcion, usoPropuesto)>
+<!ELEMENT peso EMPTY>
+<!ELEMENT volumen EMPTY>
+<!ATTLIST combinaciones
+            descripcion CDATA #REQUIRED
+            usoPropuesto CDATA #REQUIRED>
+<!ATTLIST peso gramos CDATA #IMPLIED>
+<!ATTLIST volumen
+            ancho CDATA #REQUIRED
+            largo CDATA #REQUIRED
+            alto CDATA #REQUIRED>
+<!ATTLIST volumen
+            ancho CDATA #REQUIRED
+            largo CDATA #REQUIRED
+            alto CDATA #REQUIRED>
+<!ATTLIST color
+            valor CDATA #REQUIRED>
+<!ATTLIST material
+            tipo CDATA #REQUIRED>
+]>
+
+-- Consulta : Consultar la informacion de la descripcion de la combo oferta con mayor peso.
+SELECT EXTRACTVALUE(descripcion, 'TDescripcion/informacion[max(TDescripcion/informacion/peso)]/@gramos') FROM
+CombosOfertas;

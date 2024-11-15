@@ -1,0 +1,36 @@
+/*CRUDE*/
+CREATE OR REPLACE PACKAGE PC_CLIENTE AS 
+    PROCEDURE ad_cliente(tid IN VARCHAR, nid IN NUMBER, nombre IN VARCHAR, correo IN VARCHAR);
+
+    PROCEDURE up_cliente(tid IN VARCHAR, nid IN NUMBER);
+
+    PROCEDURE ad_clienteTelefonos(tid IN VARCHAR, nid IN NUMBER, telefono IN NUMBER);
+
+    FUNCTION co_1(tid IN VARCHAR, nid IN NUMBER) RETURN VARCHAR2;
+
+    FUNCTION co_by_cliente RETURN SYS_REFCURSOR;
+END PC_CLIENTE;
+
+
+
+CREATE OR REPLACE PACKAGE PC_BIEN AS
+    PROCEDURE ad_bien(codigo IN VARCHAR, nombre IN VARCHAR, precioVenta IN NUMBER);
+
+    PROCEDURE up_bien(codigo IN VARCHAR);
+
+    PROCEDURE co_bi(codigo IN VARCHAR, bienDelMes IN VARCHAR, precioVenta IN NUMBER);
+
+    FUNCTION bien_del_mes(codigo IN VARCHAR, nombre IN VARCHAR) RETURN VARCHAR2;
+
+END PC_BIEN;
+
+
+
+CREATE OR REPLACE PACKAGE PC_FACTURAS AS 
+    PROCEDURE ad_facturas(numero IN NUMBER, fecha IN DATE, total IN NUMBER, tid IN VARCHAR, nid IN VARCHAR);
+
+    PROCEDURE up_facturas(numero IN NUMBER, tid IN VARCHAR, nid IN VARCHAR);
+
+    FUNCTION co_fa(fecha IN DATE, total IN NUMBER, porcentaje IN NUMBER) RETURN VARCHAR2;
+
+END PC_FACTURAS;
